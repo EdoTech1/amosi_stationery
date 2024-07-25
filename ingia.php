@@ -1,0 +1,138 @@
+<?php
+error_reporting(0);
+$yy = base64_decode($_GET['y']);
+// $error = base64_decode($_GET['x']);
+require_once("includes/connection.php");
+
+if(isset($_POST['submit'])){
+    $email=$_POST['email'];
+    $password=$_POST['password'];
+
+
+    
+    if(empty($email)||empty($password)){
+        $error = "Error ! You must fill all filds";
+    }
+    else{
+        $select="SELECT passwordz,userType,statuz FROM users WHERE email='$email'";
+        $query=mysqli_query($con,$select);
+        $ray=mysqli_fetch_array($query);
+        $paw=$ray['passwordz'];
+        $utype=$ray['userType'];
+        $statuz=$ray['statuz'];
+
+        if(password_verify($password,$paw)){
+            if($statuz == 'active'){
+                if($utype=="User"){
+                    session_start();
+                    $_SESSION['user']=$email;
+                    header("location:watumiaji/nyumbani.php");
+                }
+                elseif($utype=="Admin"){
+                    session_start();
+                    $_SESSION['Admin']=$email;
+                    header("location:utawala/home.php");
+                }
+                
+                else{
+                    $error ="Something is wrong";
+                }
+
+            }
+            else{
+                $error ="Please login To your email to activate your Account";
+            }
+            
+        }
+        else{
+            $error = "Error ! wrong username or password";
+        } 
+    }
+} 
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Amosi Stationary</title>
+    <meta name="description" content="Amosi Stationary">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic&amp;display=swap">
+    <link rel="stylesheet" href="assets/css/swiper-icons.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/baguetteBox.min.css">
+    <link rel="stylesheet" href="assets/css/Contact-Details-icons.css">
+    <link rel="stylesheet" href="assets/css/Hero-Clean-Reverse-images.css">
+    <link rel="stylesheet" href="assets/css/Simple-Slider-swiper-bundle.min.css">
+    <link rel="stylesheet" href="assets/css/Simple-Slider.css">
+</head>
+
+<body style="background-color: antiquewhite;">
+    <?php include_once("includes/top.php")?>
+    <div class="container  py-4 py-xl-5">
+    <section id="contact">
+        
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-12 col-xl-10">
+            <div class="card shadow-lg o-hidden border-0 my-5">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-flex">
+                            <div class="flex-grow-1 bg-login-image" style="background-image: url('assets/img/pic/regster.jpg');"></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h4 class="text-dark mb-4">Sign-In!</h4>
+                                    <p>welcom back</p>
+                                </div>
+                                <form class="user" method="Post">
+                                <span>
+                                                    <?php
+                                                    $yy == $succe;
+                                                    if(isset($succe)) {
+                                                        echo "<div class='alert alert-success'>
+                                                        <strong>Success!</strong> $succe.
+                                                        </div>";
+                                                    }else if(isset($error)) {
+                                                        echo "<div class='alert alert-warning'>
+                                                        <strong>Warning!</strong> $error.
+                                                        </div>";
+                                                    }
+                                                    else{
+                                                        echo "";
+                                                    }
+                                                    ?>
+                                                </span>
+                                    <div class="mb-3"><input id="exampleInputEmail" class="form-control form-control-user" type="email" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email" /></div>
+                                    <div class="mb-3"><input id="exampleInputPassword" class="form-control form-control-user" type="password" placeholder="Enter Password..." name="password" /></div>
+                                    <div class="mb-3">
+                                    </div><button class="btn btn-primary d-block btn-user w-100" name="submit" type="submit">Login</button>
+                                    <hr/>
+                                </form>
+                                <div class="text-center"><a class="small" href="jisajili.php">I don't have an Account!</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    </section>
+</div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/baguetteBox.min.js"></script>
+    <script src="assets/js/creative.js"></script>
+    <script src="assets/js/Simple-Slider-swiper-bundle.min.js"></script>
+    <script src="assets/js/Simple-Slider.js"></script>
+</body>
+
+</html>
